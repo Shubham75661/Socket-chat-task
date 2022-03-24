@@ -9,6 +9,7 @@ const dotenv = require('dotenv')
 
 dotenv.config()
 
+//Connection to Mongodb
 const mongoDB = process.env.Mongo_connection
 
 mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology : true}).then(() => {
@@ -29,11 +30,12 @@ const io = new Server(server, {
 
 io.on("connection", (socket) => {
     console.log(`User Connected: ${socket.id}`);
-  
     socket.on("join_room", (data) => {
       socket.join(data);
-      // Msg.find({user : data.username, room : data.room}).then(result =>{
-      //     socket.broadcast.emit("receive_message", result);
+      // Msg.find({user : data.username, room : data.room}).then(data =>{
+      //   data.map((data) => 
+      //   {socket.broadcast.emit("receive_message", data);
+      //   })
       //    })
       console.log(`User with ID: ${socket.id} joined room: ${data.room}`);
       // Msg.find({user : data.username, room : data.room}).limit(100).fetch(function(err, res){
@@ -44,6 +46,7 @@ io.on("connection", (socket) => {
       // })
     });
 
+    //Sending data
     socket.on("send_message", (data) => {
       const Message = new Msg({msg : data.message, user : data.author, room : data.room});
       Message.save().then(() => {
