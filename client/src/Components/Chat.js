@@ -7,7 +7,7 @@ function Chat({socket, username, room}) {
     const [messageList, setmessageList] = useState([]);
 
     
- 
+ //Sending Data
     const sendMessage = async () => {
         if (currentMessage !== "") {
             const messageData = {

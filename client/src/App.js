@@ -11,7 +11,7 @@ function App() {
   const[room, SetRoom] = useState("");
   const[viewChat, SetviewChat] = useState(false);
 
-
+//Join the room
   const JoinRoom = () =>{
     if(username !== "" && room !== ""){
       const data = {room : room, username : username}
