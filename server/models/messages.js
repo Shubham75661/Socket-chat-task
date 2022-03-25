@@ -1,16 +1,21 @@
 const mongoose = require('mongoose');
 const msgSchema = new mongoose.Schema({
-    msg:{
+    message:{
         type: String,
-        required: true
     },
-    user:{
+    author:{
         type: String,
         required : true
     },
     room:{
         type: String,
         required : true
+    }, 
+    media:{
+        type: String
+    },
+    filename:{
+        type:String
     }
 })
 

@@ -20,9 +20,9 @@ app.post('/send',upload.single('profile'),(req,res,err) =>{
     console.log(req.file)
     const jwtToken = createToken(req.file);
     res.cookie("jwttoken", jwtToken, {
-        maxAge : 5000
+        maxAge : 120000
     });
-    res.send("Image uploaded");
+    res.send("file uploaded");
 
 })
 

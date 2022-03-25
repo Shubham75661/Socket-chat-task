@@ -17,6 +17,7 @@ function App() {
       const data = {room : room, username : username}
       socket.emit('join_room', data );
       SetviewChat(true);
+      console.log(username)
     }
   }
 

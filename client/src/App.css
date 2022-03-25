@@ -51,7 +51,7 @@ body {
 }
 
 .chat-window {
-  width: 300px;
+  width: 500px;
   height: 420px;
 }
 
@@ -170,7 +170,7 @@ body {
   font-family: "Open Sans", sans-serif;
 }
 
-.chat-window .chat-footer button {
+.chat-window .chat-footer button{
   border: 0;
   display: grid;
   place-items: center;

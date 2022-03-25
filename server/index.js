@@ -28,15 +28,17 @@ const io = new Server(server, {
     }
 });
 
+
 io.on("connection", (socket) => {
     console.log(`User Connected: ${socket.id}`);
     socket.on("join_room", (data) => {
-      socket.join(data);
-      // Msg.find({user : data.username, room : data.room}).then(data =>{
-      //   data.map((data) => 
-      //   {socket.broadcast.emit("receive_message", data);
-      //   })
-      //    })
+      socket.join(data.room);
+       Msg.find({ room : data.room}).then(result =>{
+        result.map((data) => 
+        {
+          socket.emit("receive_message", data);
+        })
+         })
       console.log(`User with ID: ${socket.id} joined room: ${data.room}`);
       // Msg.find({user : data.username, room : data.room}).limit(100).fetch(function(err, res){
       //   if(err){
@@ -48,11 +50,29 @@ io.on("connection", (socket) => {
 
     //Sending data
     socket.on("send_message", (data) => {
-      const Message = new Msg({msg : data.message, user : data.author, room : data.room});
+      const Message = new Msg({message : data.message, author : data.author, room : data.room});
       Message.save().then(() => {
         socket.broadcast.emit("receive_message", data);
       })
     });
+    socket.on("send_file", (data) => {
+      const Message = new Msg({author : data.author, room : data.room, media : data.media, filename : data.filename});
+      Message.save().then(() =>{
+        socket.broadcast.emit("receive_message", data);
+      setTimeout(() => {
+       Msg.deleteOne({filename : data.filename}).then((result) =>{
+          console.log(result)
+       }).catch((error) => {
+          console.log(error)
+       })  
+      }, 8000);
+      })  
+    });
+
+    // socket.on('send_file', (file) =>{
+    //   console.log(file)
+    //   // socket.broadcast.emit("receive_file", file);
+    // })
   
     socket.on("disconnect", () => {
       console.log("User Disconnected", socket.id);
