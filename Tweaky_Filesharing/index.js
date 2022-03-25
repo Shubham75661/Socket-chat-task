@@ -1,5 +1,6 @@
 const express = require('express');
 const multer = require('multer');
+const {createToken} = require('./Jwt')
 
 const app = express();
 
@@ -17,7 +18,12 @@ const upload = multer({storage : storage});
 
 app.post('/send',upload.single('profile'),(req,res,err) =>{
     console.log(req.file)
+    const jwtToken = createToken(req.file);
+    res.cookie("jwttoken", jwtToken, {
+        maxAge : 5000
+    });
     res.send("Image uploaded");
+
 })
 
 app.listen('3002', ()=>{
