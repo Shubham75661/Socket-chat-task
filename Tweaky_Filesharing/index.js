@@ -38,7 +38,6 @@ app.use(express.json())
 // })
 
 app.post('/', async (req, res) => {
-    console.log(req.body)
     const message = new Msg({
         author : req.body.author,
         room : req.body.room,

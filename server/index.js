@@ -78,6 +78,7 @@ io.on("connection", (socket) => {
       }})
       .then((response) => {
         console.log(response);
+        socket.broadcast.emit("receive_message", data);
       }, (error) => {
         console.log(error);
       });

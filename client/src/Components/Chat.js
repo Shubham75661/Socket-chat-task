@@ -37,8 +37,8 @@ function Chat({socket, username, room}) {
             ":" +
             new Date(Date.now()).getMinutes(),
         }
-        // await socket.emit("send_file", messageData);
-        await socket.emit("send_file_api", messageData);
+        await socket.emit("send_file", messageData);
+        // await socket.emit("send_file_api", messageData);
         setmessageList((list) => [...list, messageData])
         setcurrentMessage("")
         setMedia("");
