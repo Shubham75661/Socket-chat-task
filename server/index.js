@@ -6,6 +6,8 @@ const {Server} = require('socket.io');
 const mongoose = require('mongoose');
 const Msg = require('./models/messages');
 const dotenv = require('dotenv')
+const axios = require('axios');
+
 
 dotenv.config()
 
@@ -40,12 +42,7 @@ io.on("connection", (socket) => {
         })
          })
       console.log(`User with ID: ${socket.id} joined room: ${data.room}`);
-      // Msg.find({user : data.username, room : data.room}).limit(100).fetch(function(err, res){
-      //   if(err){
-      //     throw err;
-      //   }
-      //   socket.broadcast.emit("receive_message", data);
-      // })
+      
     });
 
     //Sending data
@@ -55,6 +52,8 @@ io.on("connection", (socket) => {
         socket.broadcast.emit("receive_message", data);
       })
     });
+
+    
     socket.on("send_file", (data) => {
       const Message = new Msg({author : data.author, room : data.room, media : data.media, filename : data.filename});
       Message.save().then(() =>{
@@ -69,10 +68,20 @@ io.on("connection", (socket) => {
       })  
     });
 
-    // socket.on('send_file', (file) =>{
-    //   console.log(file)
-    //   // socket.broadcast.emit("receive_file", file);
-    // })
+
+    // Send files using an API
+    socket.on("send_file_api", (data) => {
+      const new_data = {author : data.author, room : data.room, media : data.media, filename : data.filename}
+      axios.post('http://localhost:3002/', new_data,{
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      }})
+      .then((response) => {
+        console.log(response);
+      }, (error) => {
+        console.log(error);
+      });
+    })
   
     socket.on("disconnect", () => {
       console.log("User Disconnected", socket.id);
